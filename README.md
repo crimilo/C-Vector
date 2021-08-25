@@ -54,7 +54,7 @@ void iterate(vector(my_struct*) v)
 {
     // Index style
     for (size_t i = 0; i < vec_size(v); i++)
-        printf(..., my_vec[i]->member);
+        printf(..., v[i]->member);
         
     // Iterator style
     vec_iterator(my_struct*) it;
