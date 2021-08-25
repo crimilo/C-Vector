@@ -29,9 +29,7 @@ header -> +--+--+--+--+--+
           |   capacity   |        /* Current maximum capacity */
 user's -> +--+--+--+--+--+
 pointer   |              |
-          |              |
           |     array    |        /* Array containing data */
-          |              |
           |              |
           +--+--+--+--+--+
 ```
@@ -42,32 +40,39 @@ typedef struct { ... } my_struct;
 
 int main(void)
 {
-    vector(my_struct*) my_vec = NULL;
+    vector(my_struct*) v = NULL;
     
     my_struct *obj = malloc(...);
     
     // Just like primitive types!
-    vec_push(my_vec, obj);
+    vec_push(v, obj);
 }
 ```
-##### Function arguments
+##### Function arguments & Iterators
 ```c
-void foo(vector(my_struct*) my_vec)
+void iterate(vector(my_struct*) v)
 {
-    printf(..., my_vec[0]->example);
+    // Index style
+    for (size_t i = 0; i < vec_size(v); i++)
+        printf(..., my_vec[i]->member);
+        
+    // Iterator style
+    vec_iterator(my_struct*) it;
+    for (it = vec_begin(v); it != vec_end(v); ++it)
+        printf(..., (*it)->member);
 }
 ```
-##### Memory optimization
+##### Pre-allocation
 ```c
 int main(void)
 {
-    vector(int) my_vec = NULL;
+    vector(int) v = NULL;
     
     // Pre-allocate memory
-    vec_reserve(my_vec, 1024);
+    vec_reserve(v, 1024);
     
     for (int i = 0; i < 256; i++)
-      vec_push(my_vec, i);
+      vec_push(v, i);
     // Vector was already big enough to store 256 ints
     // no reallocations were made!
 }
@@ -76,14 +81,14 @@ int main(void)
 ```c
 int main(void)
 {
-    vector(int) my_vec = NULL;
-    vector(int) another_vec = NULL;
+    vector(int) v = NULL;
+    vector(int) another_v = NULL;
     
-    vec_push(another_vec, 1);
-    vec_push(another_vec, 2);
+    vec_push(another_v, 1);
+    vec_push(another_v, 2);
     
-    vec_insert_many(my_vec, 0, another_vec, vec_size(another_vec));
-    // my_vec now contains 1 and 2
+    vec_insert_many(v, 0, another_v, vec_size(another_v));
+    // v now contains 1 and 2
 }
 ```
 For other functionalities check vector.h.
